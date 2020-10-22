@@ -8,7 +8,9 @@
     "build:prod": "webpack --optimize-minimize --define proces.env.NODE_ENV='production' --env production",
     "build:dev": "webpack",
     "dev-server": "webpack-dev-server --open",
-    "test": "jest"
+    "start":"node server/server.js",
+    "heroku-postbuild":"npm run build:prod"
+  
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +29,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.11.5",
+    "express": "^4.17.1",
     "live-server": "^1.2.1",
     "moment": "^2.29.1",
     "node-sass": "^4.14.1",
