@@ -14,6 +14,17 @@ import {setTextFilter} from "./actions/filter"
 import 'normalize.css/normalize.css'
 import './styles/styles.scss'
 
+import "./firebase/firebase"
+
+// import expenses from '../tests/fixtures/expenses'
+// const getExpensesTotal = (expenses)=>{
+//     return expenses.reduce((total,item)=>{
+//         return total + item.amount
+//     },0)
+// }
+
+// console.log(getExpensesTotal(expenses))
+
 const store = configureStore()
 
 

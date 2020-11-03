@@ -7,7 +7,7 @@ import {DateRangePicker} from "react-dates"
 import {setStartDate} from "../actions/filter"
 import {setEndDate} from "../actions/filter"
 
-class ExpenseListFilters extends React.Component{
+export class ExpenseListFilters extends React.Component{
     constructor(props){
         super(props)
         this.state={
@@ -15,21 +15,23 @@ class ExpenseListFilters extends React.Component{
         }
     }
     onDatesChange = ({startDate,endDate})=>{
-        this.props.dispatch(setStartDate(startDate))
-        this.props.dispatch(setEndDate(endDate))
+        this.props.setStartDate(startDate)
+        this.props.setEndDate(endDate)
     }
-    render(){
-    return (<div>
-    <input type="text" value={this.props.filter.text} onChange={(e)=>{
-        this.props.dispatch(setTextFilter(e.target.value))
-    }} />
-    <select value={this.props.filter.sortBy} onChange={(e)=>{
+    onTextChange=(e)=>{
+        this.props.setTextFilter(e.target.value)
+    }
+    onDateFilterChange=(e)=>{
         if(e.target.value=="date"){
-            this.props.dispatch(sortByDate())
+            this.props.sortByDate()
         }
         else if(e.target.value=="amount"){
-            this.props.dispatch(sortByAmount())
-        }}}>
+            this.props.sortByAmount()
+        }}
+    render(){
+    return (<div>
+    <input type="text" value={this.props.filter.text} onChange={this.onTextChange} />
+    <select value={this.props.filter.sortBy} onChange={this.onDateFilterChange}>
     <option value="date">Date</option>
     <option value="amount">Amount</option>
     </select>
@@ -56,6 +58,16 @@ const StateToProps = (state)=>{
         filter:state.filter
     }
 }
+const mapDispatchtoProps = (dispatch)=>{
+    return {
+        setStartDate: (startDate)=>{dispatch(setStartDate(startDate))},
+        setEndDate:(endDate)=>{dispatch(setEndDate(endDate))},
+        setTextFilter:(data)=>{dispatch(setTextFilter(data))},
+        sortByDate:()=>{dispatch(sortByDate())},
+        sortByAmount:()=>{dispatch(sortByAmount())}
 
-export default connect(StateToProps)(ExpenseListFilters)
+    }
+}
+
+export default connect(StateToProps,mapDispatchtoProps)(ExpenseListFilters)
 
