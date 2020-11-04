@@ -7,14 +7,15 @@ import AppRouter from './routers/AppRouter'
 
 import configureStore from "./store/configureStore"
 
-import {addExpense} from "./actions/expenses"
+
 import {Provider} from "react-redux"
-import {setTextFilter} from "./actions/filter"
+
 
 import 'normalize.css/normalize.css'
 import './styles/styles.scss'
 
 import "./firebase/firebase"
+
 
 // import expenses from '../tests/fixtures/expenses'
 // const getExpensesTotal = (expenses)=>{

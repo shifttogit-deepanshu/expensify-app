@@ -3,3 +3,5 @@ bundle.js/
 bundle.js.map/
 main.css/
 main.css.map/
+.env.development
+.env.test

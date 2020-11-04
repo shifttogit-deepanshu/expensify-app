@@ -1,4 +1,12 @@
-import {removeExpense,editExpense,addExpense} from "../../src/actions/expenses"
+import {removeExpense,editExpense,addExpense,startAddExpense} from "../../src/actions/expenses"
+import expenses from "../fixtures/expenses"
+import configureStore from "redux-mock-store"
+import thunk from "redux-thunk"
+import database from "../../src/firebase/firebase"
+
+
+const middlewares = [thunk] // add your middlewares like `redux-thunk`
+const mockStore = configureStore(middlewares)
 
 test("should remove an expense",()=>{
     const result = removeExpense({id:45})
@@ -20,20 +28,43 @@ test("should edit the expense",()=>{
 })
 
 test("should add an expense",()=>{
-    const expenseData = {
-        description:"desc",
-        note:"not note",
-        amount:1000,
-        createdAt:1200
-    }
-    const result = addExpense(expenseData)
+    
+    const result = addExpense(expenses[1])
 
     expect(result).toEqual({
         type:"ADD_EXPENSE",
-        expense:{...expenseData   
+        expense:{...expenses[1]   
         }
     })
 })
+
+test('should dispatch action and fetch values from database',(done)=>{
+    const store = mockStore({})
+    const expenseData = {
+        description:"mouse",
+        note:"better",
+        amount:1000,
+        createdAt:1000,
+
+    }
+    store.dispatch(startAddExpense(expenseData)).then(()=>{
+        const actions = store.getActions()
+        expect(actions[0]).toEqual({
+            type:"ADD_EXPENSE",
+            expense:{
+                id:expect.any(String),
+                ...expenseData 
+            }
+
+        });
+        return database.ref(`expenses/${actions[0].expense.id}`).once('value')
+        
+    }).then((snapshot)=>{
+        expect(snapshot.val()).toEqual(expenseData);
+        done();
+    })
+})
+
 
 // test("should add an expense with default values",()=>{
 //     const result = addExpense()
