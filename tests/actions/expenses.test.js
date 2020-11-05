@@ -1,9 +1,17 @@
-import {removeExpense,editExpense,addExpense,startAddExpense} from "../../src/actions/expenses"
+import {removeExpense,editExpense,addExpense,startAddExpense,setExpense,startSetExpense} from "../../src/actions/expenses"
 import expenses from "../fixtures/expenses"
 import configureStore from "redux-mock-store"
 import thunk from "redux-thunk"
 import database from "../../src/firebase/firebase"
 
+beforeEach(()=>{
+    const expenseData = {}
+    expenses.forEach(({id,description,note,amount,createdAt})=>{
+        expenseData[id] = {description,note,amount,createdAt}
+    })
+
+    database.ref('expenses').set(expenseData)
+})
 
 const middlewares = [thunk] // add your middlewares like `redux-thunk`
 const mockStore = configureStore(middlewares)
@@ -62,6 +70,26 @@ test('should dispatch action and fetch values from database',(done)=>{
     }).then((snapshot)=>{
         expect(snapshot.val()).toEqual(expenseData);
         done();
+    })
+})
+
+test('should set expense correctly',()=>{
+    const action = setExpense(expenses)
+    expect(action).toEqual({
+        type:"SET_EXPENSE",
+        expenses 
+    })
+})
+
+test('should fetch data and set values',(done)=>{
+    const store = mockStore({})
+    store.dispatch(startSetExpense()).then(()=>{
+        const action = store.getActions()
+        expect(action[0]).toEqual({
+            type:"SET_EXPENSE",
+            expenses
+        });
+        done()
     })
 })
 

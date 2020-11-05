@@ -16,3 +16,12 @@ test('should not remove expense if id not found',()=>{
     const result = expenseReducer(expenses,{type:"REMOVE_EXPENSE",id:-1})
     expect(result).toEqual(expenses)
 })
+
+test('should set expense',()=>{
+    const setExpense = {
+        type:"SET_EXPENSE",
+        expenses:[expenses[1]]
+    }
+    const result = expenseReducer(expenses,setExpense)
+    expect(result).toEqual([expenses[1]])
+})

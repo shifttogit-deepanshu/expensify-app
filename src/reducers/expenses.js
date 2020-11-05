@@ -18,6 +18,8 @@ export default (state=expenseReducerDefault,action)=>{
                 return item
             }
         })  
+        case 'SET_EXPENSE':
+        return action.expenses
         default:
         return state
             }
